@@ -472,11 +472,7 @@
   <!-- ══ HERO ══════════════════════════════════════ -->
   <section id="hero">
     <div class="container">
-      <div class="hero-avatar-placeholder">🤖</div>
-      <!--
-        Para usar sua foto real, substitua o div acima por:
-        <img src="SUA_FOTO.jpg" alt="Johnny Zani" class="hero-avatar" />
-      -->
+      <img src="Foto Perfil.jpg" alt="Johnny Zani" class="hero-avatar" />
       <p class="tag" style="margin-bottom:16px;">Criador de Conteúdo Digital • IA & Automação</p>
       <h1 class="hero-name">
         Johnny <span>Zani</span> Mianovichi
