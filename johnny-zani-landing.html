@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Johnny Zani — IA no WhatsApp para Negócios Locais</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Base ──────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black:   #0D0D0D;
+      --surface: #161616;
+      --card:    #1E1E1E;
+      --gold:    #F5A623;
+      --gold2:   #FFB84D;
+      --white:   #FFFFFF;
+      --muted:   #A0A0A0;
+      --green:   #2ECC71;
+      --border:  #2A2A2A;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+    /* ── Utility ───────────────────────────────────── */
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .tag {
+      display: inline-block;
+      background: rgba(245,166,35,0.15);
+      color: var(--gold);
+      border: 1px solid rgba(245,166,35,0.3);
+      border-radius: 100px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 5px 14px;
+    }
+    /* ── Hero ──────────────────────────────────────── */
+    #hero {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 20px 60px;
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 0%, rgba(245,166,35,0.08) 0%, transparent 70%),
+        var(--black);
+      position: relative;
+      overflow: hidden;
+    }
+    #hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 80%, rgba(245,166,35,0.04) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(46,204,113,0.03) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .hero-avatar {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 3px solid var(--gold);
+      object-fit: cover;
+      margin-bottom: 20px;
+      box-shadow: 0 0 30px rgba(245,166,35,0.3);
+      animation: pulse-ring 3s ease-in-out infinite;
+    }
+    /* Fallback quando sem imagem real */
+    .hero-avatar-placeholder {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 3px solid var(--gold);
+      background: linear-gradient(135deg, #1E1E1E, #2A2A2A);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.8rem;
+      margin: 0 auto 20px;
+      box-shadow: 0 0 30px rgba(245,166,35,0.3);
+      animation: pulse-ring 3s ease-in-out infinite;
+    }
+    @keyframes pulse-ring {
+      0%, 100% { box-shadow: 0 0 20px rgba(245,166,35,0.2); }
+      50%       { box-shadow: 0 0 40px rgba(245,166,35,0.45); }
+    }
+    .hero-name {
+      font-size: clamp(2rem, 8vw, 3rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+    .hero-name span { color: var(--gold); }
+    .hero-handle {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 18px;
+      letter-spacing: 0.02em;
+    }
+    .hero-tagline {
+      font-size: clamp(1rem, 4vw, 1.2rem);
+      color: #CCCCCC;
+      max-width: 420px;
+      margin: 0 auto 30px;
+      font-weight: 400;
+    }
+    .hero-tagline strong { color: var(--white); font-weight: 700; }
+    .hero-stats {
+      display: flex;
+      gap: 28px;
+      justify-content: center;
+      margin-bottom: 36px;
+    }
+    .stat { text-align: center; }
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--gold);
+      display: block;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--gold);
+      color: var(--black);
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 16px 32px;
+      border-radius: 14px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 24px rgba(245,166,35,0.35);
+    }
+    .hero-cta:hover, .hero-cta:active {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(245,166,35,0.5);
+    }
+    /* ── Section base ──────────────────────────────── */
+    section {
+      padding: 64px 0;
+    }
+    .section-title {
+      font-size: clamp(1.6rem, 6vw, 2.2rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin-bottom: 10px;
+      line-height: 1.15;
+    }
+    .section-title span { color: var(--gold); }
+    .section-subtitle {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 36px;
+    }
+    /* ── Sobre ─────────────────────────────────────── */
+    #sobre { background: var(--surface); }
+    .sobre-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .sobre-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .sobre-item:hover {
+      border-color: rgba(245,166,35,0.4);
+      transform: translateX(4px);
+    }
+    .sobre-icon {
+      font-size: 1.8rem;
+      flex-shrink: 0;
+      width: 44px;
+      text-align: center;
+    }
+    .sobre-text h3 {
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+    .sobre-text p {
+      color: var(--muted);
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+    /* ── Links ─────────────────────────────────────── */
+    #links { background: var(--black); }
+    .links-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .link-btn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 22px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      font-weight: 700;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+    .link-btn::after {
+      content: '→';
+      position: absolute;
+      right: 22px;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: 0;
+      transition: opacity 0.2s, right 0.2s;
+    }
+    .link-btn:hover::after {
+      opacity: 1;
+      right: 18px;
+    }
+    .link-btn.primary {
+      background: var(--gold);
+      color: var(--black);
+      border-color: var(--gold);
+      box-shadow: 0 4px 20px rgba(245,166,35,0.25);
+    }
+    .link-btn.primary:hover {
+      background: var(--gold2);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(245,166,35,0.4);
+    }
+    .link-btn.secondary {
+      background: var(--card);
+      color: var(--white);
+    }
+    .link-btn.secondary:hover {
+      border-color: var(--gold);
+      background: rgba(245,166,35,0.07);
+      transform: translateY(-2px);
+    }
+    .link-btn .btn-icon { font-size: 1.4rem; flex-shrink: 0; }
+    .link-btn .btn-text { flex: 1; }
+    .link-btn .btn-label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 400;
+      opacity: 0.7;
+      margin-top: 1px;
+    }
+    /* ── Destaque / Serviços ───────────────────────── */
+    #servicos { background: var(--surface); }
+    .servicos-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    @media (min-width: 480px) {
+      .servicos-grid { grid-template-columns: 1fr 1fr; }
+    }
+    .servico-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 28px 24px;
+      transition: all 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .servico-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+    .servico-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(245,166,35,0.3);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+    .servico-card:hover::before { opacity: 1; }
+    .servico-emoji { font-size: 2rem; margin-bottom: 14px; display: block; }
+    .servico-title {
+      font-size: 1rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+    .servico-desc {
+      font-size: 0.83rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .servico-badge {
+      display: inline-block;
+      margin-top: 14px;
+      background: rgba(46,204,113,0.12);
+      color: var(--green);
+      border: 1px solid rgba(46,204,113,0.25);
+      border-radius: 100px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 10px;
+    }
+    /* ── Prova Social ──────────────────────────────── */
+    #prova { background: var(--black); }
+    .numeros-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+    .numero-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px 16px;
+      text-align: center;
+    }
+    .numero-val {
+      font-size: clamp(1.6rem, 6vw, 2.2rem);
+      font-weight: 900;
+      color: var(--gold);
+      display: block;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+    .numero-desc {
+      font-size: 0.72rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    /* ── CTA Final ─────────────────────────────────── */
+    #cta-final {
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 100%, rgba(245,166,35,0.1) 0%, transparent 70%),
+        var(--surface);
+      text-align: center;
+      padding: 80px 20px;
+    }
+    .cta-headline {
+      font-size: clamp(1.8rem, 7vw, 2.8rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .cta-headline span { color: var(--gold); }
+    .cta-subline {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 380px;
+      margin: 0 auto 36px;
+    }
+    .cta-btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      max-width: 360px;
+      margin: 0 auto;
+    }
+    .cta-primary {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--gold);
+      color: var(--black);
+      font-weight: 800;
+      font-size: 1.05rem;
+      padding: 18px 28px;
+      border-radius: 14px;
+      box-shadow: 0 4px 24px rgba(245,166,35,0.35);
+      transition: all 0.2s;
+    }
+    .cta-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 36px rgba(245,166,35,0.5);
+    }
+    .cta-note {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    /* ── Footer ────────────────────────────────────── */
+    footer {
+      background: var(--black);
+      border-top: 1px solid var(--border);
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .footer-social {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      font-size: 1.2rem;
+      transition: all 0.2s;
+    }
+    .social-btn:hover {
+      border-color: var(--gold);
+      background: rgba(245,166,35,0.1);
+      transform: translateY(-2px);
+    }
+    .footer-name {
+      font-weight: 800;
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+    }
+    .footer-copy {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .footer-copy a { color: var(--gold); }
+    /* ── Scroll reveal ─────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+    /* ── Scrollbar ─────────────────────────────────── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <!-- ══ HERO ══════════════════════════════════════ -->
+  <section id="hero">
+    <div class="container">
+      <div class="hero-avatar-placeholder">🤖</div>
+      <!--
+        Para usar sua foto real, substitua o div acima por:
+        <img src="SUA_FOTO.jpg" alt="Johnny Zani" class="hero-avatar" />
+      -->
+      <p class="tag" style="margin-bottom:16px;">Criador de Conteúdo Digital • IA & Automação</p>
+      <h1 class="hero-name">
+        Johnny <span>Zani</span> Mianovichi
+      </h1>
+      <p class="hero-handle">@johnny.z.m</p>
+      <p class="hero-tagline">
+        Eu automatizo o <strong>atendimento do seu negócio no WhatsApp com IA</strong> —
+        para você vender 24/7 sem pegar no celular.
+      </p>
+      <div class="hero-stats">
+        <div class="stat">
+          <span class="stat-value">+40%</span>
+          <span class="stat-label">em vendas</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">-70%</span>
+          <span class="stat-label">tempo perdido</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">24/7</span>
+          <span class="stat-label">atendimento</span>
+        </div>
+      </div>
+      <a href="https://wa.me/5516994569082" class="hero-cta" target="_blank">
+        <span>💬</span>
+        Falar com o Johnny
+      </a>
+    </div>
+  </section>
+  <!-- ══ SOBRE ══════════════════════════════════════ -->
+  <section id="sobre">
+    <div class="container">
+      <p class="tag reveal">Sobre</p>
+      <h2 class="section-title reveal" style="margin-top:12px">
+        Quem é, o que faz<br /><span>e para quem.</span>
+      </h2>
+      <p class="section-subtitle reveal">
+        Um criador de conteúdo focado em mostrar como IA resolve problemas reais de negócios locais.
+      </p>
+      <div class="sobre-grid">
+        <div class="sobre-item reveal">
+          <span class="sobre-icon">🤖</span>
+          <div class="sobre-text">
+            <h3>Especialista em Automação com IA</h3>
+            <p>Implementa agentes de IA no WhatsApp que respondem, qualificam e fecham vendas automaticamente — sem você precisar estar online.</p>
+          </div>
+        </div>
+        <div class="sobre-item reveal">
+          <span class="sobre-icon">💰</span>
+          <div class="sobre-text">
+            <h3>Para Negócios Locais</h3>
+            <p>Atende donos de salão, clínicas, lojas e prestadores de serviço que perdem clientes por não responder fora do horário comercial.</p>
+          </div>
+        </div>
+        <div class="sobre-item reveal">
+          <span class="sobre-icon">📊</span>
+          <div class="sobre-text">
+            <h3>Resultados Comprovados</h3>
+            <p>Seus clientes relatam +40% em vendas e -70% de tempo gasto em atendimento manual após implementar a solução.</p>
+          </div>
+        </div>
+        <div class="sobre-item reveal">
+          <span class="sobre-icon">🎓</span>
+          <div class="sobre-text">
+            <h3>Educador Digital</h3>
+            <p>Produz conteúdo gratuito sobre IA, automação e tendências que todo empresário precisa conhecer para não ficar para trás.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ══ LINKS ══════════════════════════════════════ -->
+  <section id="links">
+    <div class="container">
+      <p class="tag reveal">Links</p>
+      <h2 class="section-title reveal" style="margin-top:12px">
+        Por onde você<br /><span>quer começar?</span>
+      </h2>
+      <p class="section-subtitle reveal">Escolha o próximo passo.</p>
+      <div class="links-list reveal">
+        <a href="https://wa.me/5516994569082" class="link-btn primary" target="_blank">
+          <span class="btn-icon">💬</span>
+          <span class="btn-text">
+            Falar com o Johnny no WhatsApp
+            <span class="btn-label">Resposta rápida • Sem compromisso</span>
+          </span>
+        </a>
+        <a href="https://www.instagram.com/johnny.z.m/" class="link-btn secondary" target="_blank">
+          <span class="btn-icon">📸</span>
+          <span class="btn-text">
+            Seguir no Instagram
+            <span class="btn-label">Conteúdo diário sobre IA e automação</span>
+          </span>
+        </a>
+        <a href="https://wa.me/5516994569082?text=Quero%20saber%20mais%20sobre%20IA%20no%20WhatsApp" class="link-btn secondary" target="_blank">
+          <span class="btn-icon">🤖</span>
+          <span class="btn-text">
+            Quero automatizar meu atendimento
+            <span class="btn-label">Solicitar diagnóstico gratuito</span>
+          </span>
+        </a>
+        <a href="https://www.instagram.com/johnny.z.m/reels/" class="link-btn secondary" target="_blank">
+          <span class="btn-icon">🎬</span>
+          <span class="btn-text">
+            Ver Conteúdo Gratuito
+            <span class="btn-label">Reels e carrosséis educativos</span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+  <!-- ══ SERVIÇOS / DESTAQUE ════════════════════════ -->
+  <section id="servicos">
+    <div class="container">
+      <p class="tag reveal">O que eu entrego</p>
+      <h2 class="section-title reveal" style="margin-top:12px">
+        Soluções que <span>geram resultado</span><br />de verdade.
+      </h2>
+      <p class="section-subtitle reveal">
+        Não é tecnologia pela tecnologia — é tecnologia que vende.
+      </p>
+      <div class="servicos-grid">
+        <div class="servico-card reveal">
+          <span class="servico-emoji">🤖</span>
+          <h3 class="servico-title">Agente IA no WhatsApp</h3>
+          <p class="servico-desc">Um assistente inteligente que atende seus clientes 24 horas, 7 dias por semana, qualifica leads e fecha vendas enquanto você dorme.</p>
+          <span class="servico-badge">✓ 24/7 ativo</span>
+        </div>
+        <div class="servico-card reveal">
+          <span class="servico-emoji">📅</span>
+          <h3 class="servico-title">Agendamento Automático</h3>
+          <p class="servico-desc">Integração com agenda digital para confirmar horários, enviar lembretes e reduzir no-shows — sem conflitos e 100% organizado.</p>
+          <span class="servico-badge">✓ Zero conflitos</span>
+        </div>
+        <div class="servico-card reveal">
+          <span class="servico-emoji">📈</span>
+          <h3 class="servico-title">Funil de Conversão com IA</h3>
+          <p class="servico-desc">Transforme conversas em vendas com um funil automatizado que aumenta a conversão em até +187% em comparação ao atendimento humano lento.</p>
+          <span class="servico-badge">✓ +187% conversão</span>
+        </div>
+        <div class="servico-card reveal">
+          <span class="servico-emoji">🎓</span>
+          <h3 class="servico-title">Mentoria & Conteúdo</h3>
+          <p class="servico-desc">Aprenda como aplicar IA no seu negócio com conteúdo educativo direto ao ponto. Sem jargão técnico, só resultado prático.</p>
+          <span class="servico-badge">✓ Gratuito no Instagram</span>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ══ PROVA SOCIAL ════════════════════════════════ -->
+  <section id="prova">
+    <div class="container">
+      <p class="tag reveal">Números que falam</p>
+      <h2 class="section-title reveal" style="margin-top:12px; margin-bottom:32px">
+        Enquanto você lê isso,<br /><span>67% dos seus clientes</span><br />estão pesquisando fora do horário.
+      </h2>
+      <div class="numeros-grid">
+        <div class="numero-box reveal">
+          <span class="numero-val">91%</span>
+          <span class="numero-desc">dos consumidores preferem resposta imediata da IA</span>
+        </div>
+        <div class="numero-box reveal">
+          <span class="numero-val">89%</span>
+          <span class="numero-desc">que tiveram má experiência simplesmente não voltam</span>
+        </div>
+        <div class="numero-box reveal">
+          <span class="numero-val">67%</span>
+          <span class="numero-desc">das pesquisas por serviços locais acontecem fora do horário comercial</span>
+        </div>
+      </div>
+      <div class="sobre-item reveal" style="background:var(--card); border:1px solid rgba(245,166,35,0.25); border-radius:16px; padding:22px 24px;">
+        <span class="sobre-icon">⚡</span>
+        <div class="sobre-text">
+          <h3 style="color:var(--gold)">A diferença está no tempo de resposta</h3>
+          <p>IA responde em <strong style="color:white">8 segundos</strong> = 95% de conversão. Humano leva horas = apenas 10% dos clientes ainda estão disponíveis.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- ══ CTA FINAL ══════════════════════════════════ -->
+  <section id="cta-final">
+    <div class="container">
+      <p class="tag reveal">Próximo passo</p>
+      <h2 class="cta-headline reveal" style="margin-top:16px">
+        Seu negócio pode<br />vender <span>24/7</span> a partir<br />de hoje.
+      </h2>
+      <p class="cta-subline reveal">
+        Fale com o Johnny agora e descubra como implementar IA no seu WhatsApp em menos de 7 dias.
+      </p>
+      <div class="cta-btn-group reveal">
+        <a href="https://wa.me/5516994569082?text=Ol%C3%A1%20Johnny!%20Quero%20automatizar%20meu%20atendimento%20com%20IA" class="cta-primary" target="_blank">
+          <span>💬</span>
+          Quero automatizar agora
+        </a>
+        <span class="cta-note">Diagnóstico gratuito • Sem compromisso • Resposta rápida</span>
+      </div>
+    </div>
+  </section>
+  <!-- ══ FOOTER ══════════════════════════════════════ -->
+  <footer>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/johnny.z.m/" class="social-btn" target="_blank" title="Instagram">📸</a>
+      <a href="https://wa.me/5516994569082" class="social-btn" target="_blank" title="WhatsApp">💬</a>
+    </div>
+    <p class="footer-name">Johnny Zani Mianovichi</p>
+    <p class="footer-copy">
+      IA no WhatsApp para negócios locais • <a href="https://www.instagram.com/johnny.z.m/">@johnny.z.m</a>
+    </p>
+    <p class="footer-copy" style="margin-top:8px; opacity:0.5">© 2026 Johnny Zani Mianovichi</p>
+  </footer>
+  <!-- ══ JS ══════════════════════════════════════════ -->
+  <script>
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(el => {
+        if (el.isIntersecting) {
+          el.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    // Stagger children reveals in grids
+    document.querySelectorAll('.sobre-grid, .servicos-grid, .numeros-grid, .links-list').forEach(grid => {
+      grid.querySelectorAll('.reveal').forEach((child, i) => {
+        child.style.transitionDelay = `${i * 80}ms`;
+      });
+    });
+  </script>
+</body>
+</html>
